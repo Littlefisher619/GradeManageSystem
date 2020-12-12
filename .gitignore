@@ -1,0 +1,5 @@
+.idea
+*.db
+*.iml
+META-INF
+out
