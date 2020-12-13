@@ -27,7 +27,7 @@ Screenshots
 
 * CourseManager
 
-  ![image-20201213195043386](README.assets/image-20201213195043386.png)
+  ![image-20201213200319189](README.assets/image-20201213200319189.png)
 
 * GradeManager
 
