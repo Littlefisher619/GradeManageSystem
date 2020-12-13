@@ -196,8 +196,13 @@ public class GradeManagerGUI extends ManagerGUI {
             String field = searchOption.getSelectedItem().toString();
             Object value = text;
             if(text.equals("null")) value=null;
-
-            data = extractGradeData(GradeManager.getInstance().getDatabase().where(field, value));
+            Collection<Grade> results = GradeManager.getInstance().getDatabase().where(field, value);
+            if(!privileged){
+                results = GradeManager.getInstance().getDatabase().filter("student", student,  results, Integer.MAX_VALUE);
+            }
+            data = extractGradeData(
+                    results
+            );
             tableModel.setRowCount(0);
             tableModel.setDataVector(
                     data, columnTitle
