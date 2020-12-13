@@ -131,7 +131,7 @@ public class CourseManagerGUI extends ManagerGUI {
             String grade = JOptionPane.showInputDialog("Input Grade");
             if(grade == null || (grade = grade.trim()).isEmpty()) return;
             String examType = (String) JOptionPane.showInputDialog(this,
-                    "Select ExamType: Exam, Rank","Gender",JOptionPane.QUESTION_MESSAGE,null,
+                    "Select ExamType: Exam, Rank","ExamType",JOptionPane.QUESTION_MESSAGE,null,
                     new String[]{"EXAM", "RANK"}, "EXAM");
             if(examType == null) return;
             boolean ret = CourseManager.getInstance().create(
