@@ -198,7 +198,7 @@ public class GradeManagerGUI extends ManagerGUI {
             if(text.equals("null")) value=null;
             Collection<Grade> results = GradeManager.getInstance().getDatabase().where(field, value);
             if(!privileged){
-                results = GradeManager.getInstance().getDatabase().filter("student", student,  results, Integer.MAX_VALUE);
+                results = GradeManager.getInstance().getDatabase().filter("student", student.getKey(),  results, Integer.MAX_VALUE);
             }
             data = extractGradeData(
                     results
