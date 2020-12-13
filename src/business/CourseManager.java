@@ -38,8 +38,8 @@ public class CourseManager extends BusinessManager<String, Course>{
     public boolean deleteByKey(String no){
         Course target = database.retrieveOne("key", no);
         if(null!=target){
-            if(GradeManager.getInstance().queryByCourse(target).isEmpty())
-                throw new ConstraintException("Delete operation is RESTRICTED before remove all of Grade records related to this student");
+            if(!GradeManager.getInstance().queryByCourse(target).isEmpty())
+                throw new ConstraintException("Delete operation is RESTRICTED before remove all of Grade records related to this course");
             return super.deleteByKey(no);
         }else return false;
     }
