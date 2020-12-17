@@ -37,3 +37,6 @@ Screenshots
 
   ![image-20201213194831018](README.assets/image-20201213194831018.png)
 
+* Export Data(New)
+
+  ![export_data.png](README.assets/export_data.png)
