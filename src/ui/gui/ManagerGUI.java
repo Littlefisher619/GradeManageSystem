@@ -4,11 +4,15 @@ import business.StudentManager;
 import model.Student;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.io.PrintStream;
+import java.awt.event.ActionEvent;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
+import java.util.Vector;
 
 public abstract class ManagerGUI extends JPanel{
     protected static PrintStream out = System.out;
@@ -16,12 +20,14 @@ public abstract class ManagerGUI extends JPanel{
     protected GridBagLayout gridBagLayout = new GridBagLayout();
     protected String[] columnTitle;
     protected String[][] data;
+    private final String exportFileName = "data.txt";
 
     protected JButton refreshBtn = new JButton("Refresh");
     protected JButton resetBtn = new JButton("Reset");
     protected JButton deleteBtn = new JButton("Delete");
     protected JButton createBtn = new JButton("Create");
     protected JButton searchBtn = new JButton("Search");
+    protected JButton exportBtn = new JButton("Export");
     protected JComboBox<String> searchOption =new JComboBox<>();
     protected JTextField searchField = new JTextField(10);
     protected JLabel searchTip = new JLabel("Search By:");
@@ -90,9 +96,16 @@ public abstract class ManagerGUI extends JPanel{
 
         gridBagConstraints.gridx=2;
         gridBagConstraints.gridy=7;
-        gridBagConstraints.gridwidth=4;
+        gridBagConstraints.gridwidth=2;
         gridBagConstraints.gridheight=1;
         gridBagLayout.setConstraints(createBtn, gridBagConstraints);
+
+        gridBagConstraints.gridx=4;
+        gridBagConstraints.gridy=7;
+        gridBagConstraints.gridwidth=2;
+        gridBagConstraints.gridheight=1;
+        gridBagLayout.setConstraints(exportBtn, gridBagConstraints);
+
 
         gridBagConstraints.gridx=6;
         gridBagConstraints.gridy=7;
@@ -104,6 +117,10 @@ public abstract class ManagerGUI extends JPanel{
     abstract void initSearchOptions();
     abstract void registerListeners();
     abstract void refresh();
+
+    protected String getDefaultSaveName(){
+        return "export_data.txt";
+    }
 
     protected void addAllComponents(){
         add(searchTip);
@@ -117,6 +134,7 @@ public abstract class ManagerGUI extends JPanel{
         add(createBtn);
         add(deleteBtn);
         add(resetBtn);
+        add(exportBtn);
     }
 
     ManagerGUI(){
@@ -137,6 +155,53 @@ public abstract class ManagerGUI extends JPanel{
         setComponentPosition();
         addAllComponents();
         registerListeners();
-//        resetBtn.doClick();
+
+        exportBtn.addActionListener( (ActionEvent event) -> {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setSelectedFile(new File(getDefaultSaveName()));
+            fileChooser.setDialogTitle("Save To ...");
+
+            FileNameExtensionFilter filter = new FileNameExtensionFilter("*.txt", "txt");
+            fileChooser.setFileFilter(filter);
+
+            int userSelection = fileChooser.showSaveDialog(this);
+
+            if (userSelection == JFileChooser.APPROVE_OPTION) {
+                File fileToSave = fileChooser.getSelectedFile();
+                if(!fileToSave.getName().contains(".txt")){
+                    fileToSave = new File(fileToSave.getName() + ".txt");
+                }
+                try {
+                    if(fileToSave.exists()){
+                        int option = JOptionPane.showConfirmDialog(this, "Are you sure to override?", "File Already Exists", JOptionPane.YES_NO_OPTION);
+                        if(option != JOptionPane.YES_OPTION){
+                            return;
+                        }
+                    }else fileToSave.createNewFile();
+
+
+                    BufferedWriter writer = new BufferedWriter(new FileWriter(fileToSave, StandardCharsets.UTF_8));
+                    Vector<Vector> data = tableModel.getDataVector();
+                    for(int i = 0; i < table.getColumnCount(); i++){
+                        writer.write(table.getColumnName(i));
+                        writer.append('\t');
+                    }
+                    writer.append('\n');
+                    for(Vector<String> row : data){
+                        for(String col : row){
+                            writer.write(col == null ? "(null)" : col);
+                            writer.append('\t');
+                        }
+                        writer.append('\n');
+                    }
+                    writer.close();
+
+                } catch (IOException e) {
+                    JOptionPane.showMessageDialog(this, e.getMessage(), "Cannot save file" ,JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+            }
+        });
     }
 }

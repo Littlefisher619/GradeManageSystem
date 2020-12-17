@@ -154,6 +154,11 @@ public class StudentManagerGUI extends ManagerGUI {
         });
 
     }
+
+    protected String getDefaultSaveName(){
+        return "student_data.txt";
+    }
+
     void initDataModel(){
         columnTitle = new String[]{"No" , "Name", "Gender", "Age"};
         tableModel = new DefaultTableModel(){
@@ -178,4 +183,5 @@ public class StudentManagerGUI extends ManagerGUI {
             deleteBtn.setEnabled(true);
         }
     }
+
 }

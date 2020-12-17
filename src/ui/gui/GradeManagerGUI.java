@@ -311,6 +311,10 @@ public class GradeManagerGUI extends ManagerGUI {
                 BorderFactory.createEmptyBorder(10, 10, 10, 10)));
     }
 
+    protected String getDefaultSaveName(){
+        return "course_selection_data.txt";
+    }
+
     @Override
     void refresh() {
         data = null;

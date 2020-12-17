@@ -38,6 +38,10 @@ public class CourseManagerGUI extends ManagerGUI {
         tableModel.setDataVector(null, columnTitle);
     }
 
+    protected String getDefaultSaveName(){
+        return "course_data.txt";
+    }
+
     @Override
     void initSearchOptions() {
         searchOption.addItem("No");

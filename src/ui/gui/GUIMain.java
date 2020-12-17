@@ -17,6 +17,7 @@ public class GUIMain extends JFrame{
         private final JTabbedPane tabs = new JTabbedPane();
         private final String[] tabNames = { "StudentManager", "CourseManager", "GradeManager" };
 
+
         public GUIMain() {
             Thread.setDefaultUncaughtExceptionHandler(
                     (Thread thread, Throwable throwable) -> {
